@@ -1,0 +1,44 @@
+def v_url_decode(url):
+    if url:
+        print 'enter decode'
+        print urllib.unquote(url)
+        print urllib.unquote(url).split('&')
+        print map(lambda x: tuple(x.split('=')), urllib.unquote(url).split('&'))
+        return {k: v for k, v in map(lambda x: tuple(x.split('=')), urllib.unquote(url).split('&'))}
+    else:
+        return None
+
+    print bottle.request.params
+    print 'enter /qimen: {0}'.format(bottle.request.body)
+    # print  bottle.request.forms.get( "request" )
+    # print  bottle.request.POST.get()
+    print  'enter /body: {0}'.format(bottle.request.body.getvalue())
+    print  'enter /request: {0}'.format(bottle.request)
+    print  'enter /POST: {0}'.format(bottle.request.POST.allitems())
+    print  'enter /params: {0}'.format(bottle.request.params.items())
+    print  'request.query: {0}'.format(bottle.request.query.items())
+    print  'req.method: {0}'.format(bottle.request.url)
+    print  'decode: {0}'.format(bottle.request.url.decode())
+    print  'urlparts: {0}'.format(bottle.request.urlparts)
+    print  'forms: {0}'.format(bottle.request.forms.allitems())
+    url = bottle.request.query_string
+    print  'query_string: {0}'.format(url)
+    print  'parms: {0}'.format(v_url_decode(url).items())
+
+# @app.get('/:name')
+# def show(name, db):
+#     entity = db.query(Req).filter_by(name=name).first()
+#     if entity:
+#         return {'id': entity.id, 'name': entity.name}
+#     return HTTPError(404, 'Req not found.')
+
+# @app.put('/:name')
+# def put_name(name, db):
+#     entity = Req(name)
+#     db.add(entity)
+
+# @app.get('/spam/:eggs', sqlalchemy=dict(use_kwargs=True))
+# @bottle.view('some_view')
+# def route_with_view(eggs, db):
+#     pass
+#     # do something useful here

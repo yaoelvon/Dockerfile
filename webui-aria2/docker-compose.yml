@@ -1,0 +1,13 @@
+aria2:
+    image: zjqzero/aria2-alpine
+    net: host
+    volumes: 
+        - /home/zhou/downloads:/downloads
+    restart: always
+
+webui-aria2:
+    image: zjqzero/webui-aria2-alpine
+    ports:
+        - "8080:80"
+    restart: always
+
