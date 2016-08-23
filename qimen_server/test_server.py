@@ -202,6 +202,14 @@ def taobao_waybill(db):
         return handle_waybill_cancel(db)
     elif method == 'taobao.wlb.waybill.i.search':
         return handle_waybill_address(db)
+    else:
+    	return {
+            "user_seller_get_response": {
+                "user": {
+                    "user_id": 10001
+                }
+            }
+        }
 
 
 def handle_waybill_cancel(db):
