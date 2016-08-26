@@ -5,7 +5,7 @@ MAINTAINER zhoujunqian <zjqzero@gmail.com>
 RUN apk update
 RUN apk add python py-pip
 RUN pip install SQLAlchemy xmltodict jsoncompare
-COPY ./*.* /var/app/qimen_server
+COPY ./*.* /var/app/qimen_server/
 RUN touch /var/app/__init__.py
 RUN rm -rf /var/cache/apk/*
 
