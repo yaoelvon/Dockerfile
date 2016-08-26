@@ -47,7 +47,7 @@ def handle_taobao_waybill(db):
     if method == 'taobao.wlb.waybill.i.get':
         body_request = urllib.unquote(body.split('=')[-1].replace('+', ''))
         json_request = json.loads(body_request)
-        logging.debug('/router/rest json request: {}'.format(json.dumps(json_request, indent=4, ensure_ascii=False)))
+        logging.debug('/router/rest json request: {}'.format(json_request))
         package_id = json_request['trade_order_info_cols'][0]['package_id']
         package_ids = [e['package_id'] for e in json_request['trade_order_info_cols']]
 
@@ -58,9 +58,9 @@ def handle_taobao_waybill(db):
         return json.dumps(tb_get_response(waybills))
 
     elif method == 'taobao.wlb.waybill.i.candel':
-        return tb_cancel_response_normal()
+        return json.dummps(tb_cancel_response_normal())
     elif method == 'taobao.user.seller.get':
-        return tb_seller_get_response()
+        return json.dumps(tb_seller_get_response())
     elif method == 'taobao.wlb.waybill.i.search':
         return json.dumps(tb_search_response_normal())
 
