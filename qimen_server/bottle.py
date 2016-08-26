@@ -476,7 +476,7 @@ class Route(object):
         self.skiplist = skiplist or []
         #: Additional keyword arguments passed to the :meth:`Bottle.route`
         #: decorator are stored in this dictionary. Used for route-specific
-        #: plugin configuration and meta-data.
+        #: plugin configuration and meta-model.
         self.config = ConfigDict().load_dict(config, make_namespaces=True)
 
     def __call__(self, *a, **ka):
@@ -698,7 +698,7 @@ class Bottle(object):
     def merge(self, routes):
         ''' Merge the routes of another :class:`Bottle` application or a list of
             :class:`Route` objects into this application. The routes keep their
-            'owner', meaning that the :data:`Route.app` attribute is not
+            'owner', meaning that the :model:`Route.app` attribute is not
             changed. '''
         if isinstance(routes, Bottle):
             routes = routes.routes
@@ -767,7 +767,7 @@ class Bottle(object):
         return urljoin(urljoin('/', scriptname), location)
 
     def add_route(self, route):
-        ''' Add a route object, but do not change the :data:`Route.app`
+        ''' Add a route object, but do not change the :model:`Route.app`
             attribute.'''
         self.routes.append(route)
         self.router.add(route.rule, route.method, route, name=route.name)
@@ -993,7 +993,7 @@ class BaseRequest(object):
 
         Adding new attributes to a request actually adds them to the environ
         dictionary (as 'bottle.request.ext.<name>'). This is the recommended
-        way to store and access request-specific data.
+        way to store and access request-specific model.
     """
 
     __slots__ = ('environ')
@@ -1076,7 +1076,7 @@ class BaseRequest(object):
 
     @DictProperty('environ', 'bottle.request.forms', read_only=True)
     def forms(self):
-        """ Form values parsed from an `url-encoded` or `multipart/form-data`
+        """ Form values parsed from an `url-encoded` or `multipart/form-model`
             encoded POST or PUT request body. The result is returned as a
             :class:`FormsDict`. All keys and values are strings. File uploads
             are stored separately in :attr:`files`. """
@@ -1099,7 +1099,7 @@ class BaseRequest(object):
 
     @DictProperty('environ', 'bottle.request.files', read_only=True)
     def files(self):
-        """ File uploads parsed from `multipart/form-data` encoded POST or PUT
+        """ File uploads parsed from `multipart/form-model` encoded POST or PUT
             request body. The values are instances of :class:`FileUpload`.
 
         """
@@ -1323,7 +1323,7 @@ class BaseRequest(object):
 
     @property
     def auth(self):
-        """ HTTP authentication data as a (user, password) tuple. This
+        """ HTTP authentication model as a (user, password) tuple. This
             implementation currently supports basic (not digest) authentication
             only. If the authentication happened at a higher level (e.g. in the
             front web-server or a middleware), the password field is None, but
@@ -1510,8 +1510,8 @@ class BaseResponse(object):
     status = property(_get_status, _set_status, None,
         ''' A writeable property to change the HTTP response status. It accepts
             either a numeric code (100-999) or a string with a custom reason
-            phrase (e.g. "404 Brain not found"). Both :data:`status_line` and
-            :data:`status_code` are updated accordingly. The return value is
+            phrase (e.g. "404 Brain not found"). Both :model:`status_line` and
+            :model:`status_code` are updated accordingly. The return value is
             always a status string. ''')
     del _get_status, _set_status
 
@@ -1661,7 +1661,7 @@ def local_property(name=None):
 class LocalRequest(BaseRequest):
     ''' A thread-local subclass of :class:`BaseRequest` with a different
         set of attributes for each thread. There is usually only one global
-        instance of this class (:data:`request`). If accessed during a
+        instance of this class (:model:`request`). If accessed during a
         request/response cycle, this instance always refers to the *current*
         request (even on a multithreaded server). '''
     bind = BaseRequest.__init__
@@ -1671,7 +1671,7 @@ class LocalRequest(BaseRequest):
 class LocalResponse(BaseResponse):
     ''' A thread-local subclass of :class:`BaseResponse` with a different
         set of attributes for each thread. There is usually only one global
-        instance of this class (:data:`response`). Its attributes are used
+        instance of this class (:model:`response`). Its attributes are used
         to build the HTTP response at the end of the request/response cycle.
     '''
     bind = BaseResponse.__init__
@@ -1876,9 +1876,9 @@ class MultiDict(DictMixin):
 
 
 class FormsDict(MultiDict):
-    ''' This :class:`MultiDict` subclass is used to store request form data.
+    ''' This :class:`MultiDict` subclass is used to store request form model.
         Additionally to the normal dict-like item access methods (which return
-        unmodified data as native strings), this container also supports
+        unmodified model as native strings), this container also supports
         attribute-like access to its values. Attributes are automatically de-
         or recoded to match :attr:`input_encoding` (default: 'utf8'). Missing
         attributes default to an empty string. '''
@@ -1998,7 +1998,7 @@ class WSGIHeaderDict(DictMixin):
 
 class ConfigDict(dict):
     ''' A dict-like configuration storage with additional support for
-        namespaces, validators, meta-data, on_change listeners and more.
+        namespaces, validators, meta-model, on_change listeners and more.
 
         This storage is optimized for fast read access. Retrieving a key
         or using non-altering dict methods (e.g. `dict.get()`) has no overhead
@@ -3043,7 +3043,7 @@ def run(app=None, server='wsgiref', host='127.0.0.1', port=8080,
 
         :param app: WSGI application or target string supported by
                :func:`load_app`. (default: :func:`default_app`)
-        :param server: Server adapter to use. See :data:`server_names` keys
+        :param server: Server adapter to use. See :model:`server_names` keys
                for valid names or pass a :class:`ServerAdapter` subclass.
                (default: `wsgiref`)
         :param host: Server address to bind to. Pass ``0.0.0.0`` to listens on
