@@ -42,11 +42,11 @@ def yto_waybill(db):
     db.add(YtoWaybillReq(json.dumps(query_url)))
 
     xml_req = xmltodict.parse(query_url['logistics_interface'], encoding='utf-8')
-    logging.debug('yto_waybill xml rep: {}'.format(json.dumps(xml_req)))
+    logging.debug('yto_waybill xml req: {}'.format(json.dumps(xml_req)))
     rsp_func = RESPONSE_MAPPING.get(xml_req['RequestOrder']['txLogisticID'][-3]) or yto_response_normal
 
     yto_code, yto_rsp = rsp_func()
-    logging.debug('YTO reponse: {} {}'.format(yto_code, yto_rsp))
+    logging.debug('YTO response: {} {}'.format(yto_code, yto_rsp))
     db.add(YtoWaybillResp(yto_code, yto_rsp.decode('utf-8')))
 
     return yto_rsp

@@ -1,4 +1,5 @@
 # coding: utf-8
+from __future__ import unicode_literals
 import logging
 import uuid
 import json
@@ -29,10 +30,10 @@ def handle_taobao_waybill(db):
     logging.debug('-------------HANDLE TAOBAO WAYBILL GET-------------')
     GET_MAPPING = {
         '0': tb_create_waybill_normal,
-        '1': tb_create_waybill_no_part_big_pen,
-        '2': tb_create_waybill_no_all_big_pen,
-        '3': tb_create_waybill_no_waybill,
-        '4': tb_create_waybill_no_balance
+        '1': tb_create_waybill_missing_part_big_pen,
+        '2': tb_create_waybill_missing_full_big_pen,
+        '3': tb_create_waybill_missing_waybill_code,
+        '4': tb_create_waybill_without_balance
     }
     CANCEL_MAPPING = {
         '9': tb_cancel_response_normal,
@@ -47,20 +48,20 @@ def handle_taobao_waybill(db):
     if method == 'taobao.wlb.waybill.i.get':
         body_request = urllib.unquote(body.split('=')[-1].replace('+', ''))
         json_request = json.loads(body_request)
-        logging.debug('/router/rest json request: {}'.format(json_request))
+        logging.debug('/router/rest json request: {}'.format(json.dumps(json_request, indent=4, ensure_ascii=False)))
         package_id = json_request['trade_order_info_cols'][0]['package_id']
         package_ids = [e['package_id'] for e in json_request['trade_order_info_cols']]
 
         func = GET_MAPPING.get(package_id[-3]) or tb_create_waybill_normal
         waybills = [func(pid, db) for pid in package_ids]
         if package_id[-3] == '4':
-            return json.dumps(tb_create_waybill_no_balance())
+            return json.dumps(tb_create_waybill_without_balance())
         return json.dumps(tb_get_response(waybills))
 
     elif method == 'taobao.wlb.waybill.i.candel':
-        return json.dummps(tb_cancel_response_normal())
+        return tb_cancel_response_normal()
     elif method == 'taobao.user.seller.get':
-        return json.dumps(tb_seller_get_response())
+        return tb_seller_get_response()
     elif method == 'taobao.wlb.waybill.i.search':
         return json.dumps(tb_search_response_normal())
 
@@ -110,7 +111,7 @@ def tb_create_waybill_normal(package_id, db):
     return ret
 
 
-def tb_create_waybill_no_part_big_pen(package_id, db):
+def tb_create_waybill_missing_part_big_pen(package_id, db):
     waybill_code = str(uuid.uuid4()).split('-')[-1]
     ret = {
         "short_address": "SHANGHAI",
@@ -131,7 +132,7 @@ def tb_create_waybill_no_part_big_pen(package_id, db):
     return ret
 
 
-def tb_create_waybill_no_all_big_pen(package_id, db):
+def tb_create_waybill_missing_full_big_pen(package_id, db):
     waybill_code = str(uuid.uuid4()).split('-')[-1]
     ret = {
         "short_address": "",
@@ -152,7 +153,7 @@ def tb_create_waybill_no_all_big_pen(package_id, db):
     return ret
 
 
-def tb_create_waybill_no_waybill(package_id, db):
+def tb_create_waybill_missing_waybill_code(package_id, db):
     ret = {
         "short_address": "SHANGHAI",
         "trade_order_info": {
@@ -172,7 +173,7 @@ def tb_create_waybill_no_waybill(package_id, db):
     return ret
 
 
-def tb_create_waybill_no_balance(*args):
+def tb_create_waybill_without_balance(*args):
     ret = {
         "error_response": {
             "code": 50,
