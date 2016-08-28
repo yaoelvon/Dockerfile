@@ -58,7 +58,7 @@ def handle_taobao_waybill(db):
             return json.dumps(tb_create_waybill_without_balance())
         return json.dumps(tb_get_response(waybills))
 
-    elif method == 'taobao.wlb.waybill.i.candel':
+    elif method == 'taobao.wlb.waybill.i.cancel':
         return json.dumps(tb_cancel_response_normal())
     elif method == 'taobao.user.seller.get':
         return json.dumps(tb_seller_get_response())
