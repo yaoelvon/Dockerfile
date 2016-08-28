@@ -59,9 +59,9 @@ def handle_taobao_waybill(db):
         return json.dumps(tb_get_response(waybills))
 
     elif method == 'taobao.wlb.waybill.i.candel':
-        return tb_cancel_response_normal()
+        return json.dumps(tb_cancel_response_normal())
     elif method == 'taobao.user.seller.get':
-        return tb_seller_get_response()
+        return json.dumps(tb_seller_get_response())
     elif method == 'taobao.wlb.waybill.i.search':
         return json.dumps(tb_search_response_normal())
 
