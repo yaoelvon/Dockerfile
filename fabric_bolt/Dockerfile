@@ -3,7 +3,7 @@ FROM ubuntu:trusty-20160323
 MAINTAINER zhoujunqian <zjqzero@gmail.com>
 
 RUN apt-get update
-RUN apt-get -y install python-dev python-pip nginx libxml2-dev libxslt-dev zlib1g-dev supervisor
+RUN apt-get -y install python-dev python-pip nginx libxml2-dev libxslt-dev zlib1g-dev supervisor openssh-client
 
 RUN pip install fabric-bolt
 
