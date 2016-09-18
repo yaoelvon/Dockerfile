@@ -5,7 +5,7 @@ MAINTAINER zhoujunqian <zjqzero@gmail.com>
 RUN apt-get update
 RUN apt-get -y install python-dev python-pip nginx libxml2-dev libxslt-dev zlib1g-dev supervisor
 
-RUN pip install fabric-bolt -i http://pypi.douban.com/simple
+RUN pip install fabric-bolt
 
 COPY settings.py /root/.fabric-bolt/
 COPY fabric-bolt.db /root/.fabric-bolt/
