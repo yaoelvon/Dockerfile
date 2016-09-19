@@ -14,6 +14,8 @@ RUN mkdir -p /var/www/
 RUN cp -r usr/local/lib/python2.7/dist-packages/fabric_bolt/core/static /var/www/
 
 RUN rm /etc/nginx/sites-enabled/*
+RUN echo '' >> /etc/nginx/nginx.conf
+RUN echo 'daemon off;' >> /etc/nginx/nginx.conf
 COPY fabric.conf /etc/nginx/conf.d/fabric.conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
