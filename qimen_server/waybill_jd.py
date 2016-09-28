@@ -6,8 +6,8 @@ import xmltodict
 import bottle
 from bottle import HTTPError
 from bottle.ext import sqlalchemy
-from qimen_server.database import Base, engine
-from qimen_server.database import JdWaybillSendResp, JdWaybillApplyResp
+from database import Base, engine
+from database import JdWaybillSendResp, JdWaybillApplyResp
 
 jd = bottle.Bottle(catchall=False)
 

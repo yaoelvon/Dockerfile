@@ -7,7 +7,7 @@ from bottle.ext import sqlalchemy
 import bottle
 from JsonUtil import get_dict_value
 from bottle import HTTPError
-from qimen_server.database import Base, engine, Req, Resp
+from database import Base, engine, Req, Resp
 
 from waybill_yto import yto
 from waybill_jd import jd

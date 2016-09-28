@@ -1,6 +1,5 @@
 # coding: utf-8
 from __future__ import unicode_literals
-import sys
 import logging
 import uuid
 import json
@@ -8,8 +7,8 @@ import urllib
 import bottle
 from bottle import HTTPError
 from bottle.ext import sqlalchemy
-from qimen_server.database import Base, engine
-from qimen_server.database import WaybillResp
+from database import Base, engine
+from database import WaybillResp
 
 tb = bottle.Bottle(catchall=False)
 

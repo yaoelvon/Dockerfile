@@ -7,8 +7,8 @@ import bottle
 import urllib
 from bottle import HTTPError
 from bottle.ext import sqlalchemy
-from qimen_server.database import Base, engine
-from qimen_server.database import YtoWaybillReq, YtoWaybillResp
+from database import Base, engine
+from database import YtoWaybillReq, YtoWaybillResp
 
 yto = bottle.Bottle(catchall=False)
 

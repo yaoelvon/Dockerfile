@@ -1,18 +1,16 @@
 # coding: utf-8
 from __future__ import unicode_literals
-import os
 import logging
 import uuid
 import json
-import urllib
 import bottle
 import requests
 from bottle import HTTPError
 from bottle.ext import sqlalchemy
-from qimen_server.database import Base, engine
-from qimen_server.database import SfToken
-from qimen_server.database import SfWaybillResp
-from qimen_server.database import SfOrderWaybillResp
+from database import Base, engine
+from database import SfToken
+from database import SfWaybillResp
+from database import SfOrderWaybillResp
 
 # SF_CALLBACK_URL = os.environ.get('SF_CALLBACK_URL')
 
