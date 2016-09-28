@@ -5,13 +5,12 @@ MAINTAINER zhoujunqian <zjqzero@gmail.com>
 RUN apk update
 RUN apk add python py-pip
 RUN pip install SQLAlchemy xmltodict jsoncompare
-COPY ./*.* /var/app/qimen_server/
-RUN touch /var/app/__init__.py
+COPY ./*.* /var/app/
 RUN rm -rf /var/cache/apk/*
 
 ENV PYTHONPATH /var/app
 
-WORKDIR /var/app/qimen_server
+WORKDIR /var/app
 
 EXPOSE 8080
 

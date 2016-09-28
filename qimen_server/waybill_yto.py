@@ -64,6 +64,11 @@ def yto_waybill(db):
     return HTTPError(404, None)
 
 
+@yto.post('/reset')
+def yto_reset(db):
+    [db.delete(item) for item in db.query(YtoWaybillReq).all()]
+    [db.delete(item) for item in db.query(YtoWaybillResp).all()]
+
 @yto.get('/waybill_yto_search')
 def yto_waybill_search(db):
     query_url = dict(bottle.request.query)
@@ -82,7 +87,7 @@ def yto_response_normal():
     <logisticProviderID>YTO</logisticProviderID>
     <txLogisticID>WP15183117908113</txLogisticID>
     <clientID>K21000119</clientID>
-    <mailNo>{}</mailNo>
+    <mailNo>{0}</mailNo>
     <distributeInfo>
         <shortAddress>300-006-000</shortAddress>
         <consigneeBranchCode>210185</consigneeBranchCode>

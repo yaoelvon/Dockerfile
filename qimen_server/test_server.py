@@ -10,6 +10,9 @@ from bottle import HTTPError
 from qimen_server.database import Base, engine, Req, Resp
 
 from waybill_yto import yto
+from waybill_jd import jd
+from waybill_yunda import yunda
+from waybill_sf import sf
 from waybill_tb import tb, handle_taobao_waybill
 
 logging.basicConfig(format='[%(asctime)s] %(levelname)s - %(message)s', level=logging.DEBUG)
@@ -110,6 +113,9 @@ def post(db):
 
 app.mount('yto', yto)
 app.mount('tb', tb)
+app.mount('jd', jd)
+app.mount('yunda', yunda)
+app.mount('sf', sf)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

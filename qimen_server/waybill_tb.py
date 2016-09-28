@@ -1,5 +1,6 @@
 # coding: utf-8
 from __future__ import unicode_literals
+import sys
 import logging
 import uuid
 import json
@@ -79,6 +80,10 @@ def taobao_waybill(db):
     else:
         return HTTPError(404, None)
 
+
+@tb.post('/reset')
+def tb_reset(db):
+    [db.delete(item) for item in db.query(WaybillResp).all()]
 
 def tb_get_response(waybills):
     return {
@@ -228,8 +233,7 @@ def tb_search_response_normal():
                                                 "area": "朝阳区",
                                                 "province": "北京",
                                                 "town": "八里庄",
-                                                # "address_detail": "朝阳路高井，财满街，财经中心9号楼21单元6013",
-                                                "address_detail": "朝阳路高井，财满街，",
+                                                "address_detail": "朝阳路高井，财满街，财经中心9号楼21单元6013",
                                                 "city": "北京市",
                                                 "waybill_address_id": 123
                                             }
