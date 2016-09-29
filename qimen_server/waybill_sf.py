@@ -78,8 +78,9 @@ def handle_sf_waybill(access_token, sf_appid, sf_appkey, db):
     generate_order = func(trans_message_id, order_id, db)
     # callback client normal information
     success_waybill = sf_normal_rsp(trans_message_id, order_id, db)
-    SF_CALLBAC_URL = 'http://localhost:5000/waybill_push/shunfeng'
-    requests.post(SF_CALLBAC_URL, json.dumps(success_waybill))
+    SF_CALLBAC_URL = 'http://localhost:5000/waybill_push/shunfeng?customerId=RG'
+    headers = {'Content-Type': 'application/json'}
+    requests.post(SF_CALLBAC_URL, data=json.dumps(success_waybill), headers=headers)
     return json.dumps(generate_order)
 
 
@@ -106,7 +107,7 @@ def taobao_waybill(db):
     logging.debug(q)
     logging.debug(bottle.request.body.getvalue().decode('utf-8'))
     order_code = q.get('order_code')
-    record = db.query(SfWaybillResp).filter_by(key=order_code).first()
+    record = db.query(SfWaybillResp).filter_by(order_id=order_code).first()
     if record:
         return record.body
     else:
@@ -217,7 +218,7 @@ def sf_normal_rsp(trans_message_id, order_id, db):
     }
     }
     logging.debug('SFWaybill normal: {}'.format(json.dumps(ret, indent=4, ensure_ascii=False)))
-    db.add(SfWaybillResp(trans_message_id, order_id, json.dumps(ret)))
+    db.add(SfWaybillResp(trans_message_id, order_id, json.dumps(ret['body'])))
     return ret
 
 

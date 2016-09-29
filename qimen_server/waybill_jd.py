@@ -69,11 +69,11 @@ def jd_get_response_normal():
 
 def jd_send_response_normal(deliver_id, order_id):
     return json.dumps({
-        "jingdong_etms_waybill_send_response": {
+        "jingdong_etms_waybill_send_responce": {
             "resultInfo": {
                 "message": u"成功",
                 "deliveryId": deliver_id,
-                "code": "100",
+                "code": 100,
                 "orderId": order_id
             }
         }
