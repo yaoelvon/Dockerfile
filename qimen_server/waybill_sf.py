@@ -1,10 +1,10 @@
 # coding: utf-8
-from __future__ import unicode_literals
 import logging
 import uuid
 import json
 import bottle
 import requests
+import os
 from bottle import HTTPError
 from bottle.ext import sqlalchemy
 from database import Base, engine
@@ -78,9 +78,9 @@ def handle_sf_waybill(access_token, sf_appid, sf_appkey, db):
     generate_order = func(trans_message_id, order_id, db)
     # callback client normal information
     success_waybill = sf_normal_rsp(trans_message_id, order_id, db)
-    SF_CALLBAC_URL = 'http://localhost:5000/waybill_push/shunfeng?customerId=RG'
+    sf_callback = os.environ['SF_CALLBACK']
     headers = {'Content-Type': 'application/json'}
-    requests.post(SF_CALLBAC_URL, data=json.dumps(success_waybill), headers=headers)
+    requests.post(sf_callback, data=json.dumps(success_waybill), headers=headers)
     return json.dumps(generate_order)
 
 
@@ -131,52 +131,54 @@ def sf_reg_access_token(trans_message_id, db):
         access_token = token.access_token
         refresh_token = token.refresh_token
     ret = {
-    "head": {
-        "transType": "4301",
-        "transMessageId": trans_message_id,
-        "code": "EX_CODE_OPENAPI_0200",
-        "message": u"申请 ACCESS TOKEN 成功",
+        "head": {
+            "transType": "4301",
+            "transMessageId": trans_message_id,
+            "code": "EX_CODE_OPENAPI_0200",
+            "message": u"申请 ACCESS TOKEN 成功",
         },
-    "body": {
-        "accessToken": access_token,
-        "refreshToken": refresh_token
+        "body": {
+            "accessToken": access_token,
+            "refreshToken": refresh_token
         }
     }
     logging.debug('SF Token reg : {0}'.format(json.dumps(ret, indent=4, ensure_ascii=False)))
     return ret
 
+
 def sf_refresh_access_token(trans_message_id, db):
     record = db.query(SfToken).filter_by(trans_message_id=trans_message_id).first()
     refresh_token = str(uuid.uuid4())
     ret = {
-    "head": {
-        "transType":"4302",
-        "transMessageId": "201404120000000001",
-        "code": "EX_CODE_OPENAPI_0200",
-        "message": "刷新 ACCESS TOKEN 成功"
-    },
+        "head": {
+            "transType": "4302",
+            "transMessageId": "201404120000000001",
+            "code": "EX_CODE_OPENAPI_0200",
+            "message": "刷新 ACCESS TOKEN 成功"
+        },
         "body": {
             "accessToken": "094CC6A09D9B9E8FEF6AE5499158A678",
-            "refreshToken":refresh_token
+            "refreshToken": refresh_token
         }
     }
     record.refresh_token = refresh_token
     logging.debug('SFToken Refreash {0}'.format(json.dumps(ret, indent=4, ensure_ascii=False)))
     return ret
 
+
 def sf_get_access_token(trans_message_id, db):
     record = db.query(SfToken).filter_by(trans_message_id=trans_message_id).first()
     ret = {
-    "head": {
-        "transType":"4300",
-        "transMessageId": "201404120000000001",
-        "code": "EX_CODE_OPENAPI_0200",
-        "message": u"查询 ACCESS_TOKEN 成功",
-    },
-    "body": {
-        "accessToken": record.access_token,
-        "refreshToken": record.refresh_token
-    }
+        "head": {
+            "transType": "4300",
+            "transMessageId": "201404120000000001",
+            "code": "EX_CODE_OPENAPI_0200",
+            "message": u"查询 ACCESS_TOKEN 成功",
+        },
+        "body": {
+            "accessToken": record.access_token,
+            "refreshToken": record.refresh_token
+        }
     }
     logging.debug('SFToken Get {0}'.format(json.dumps(ret, indent=4, ensure_ascii=False)))
     return ret
@@ -184,16 +186,16 @@ def sf_get_access_token(trans_message_id, db):
 
 def sf_reg_order_waybill_normal(trans_message_id, order_id, db):
     ret = {
-    "head": {
-        "transType": 4200,
-        "transMessageId": trans_message_id,
-        "code": "EX_CODE_OPENAPI_0200",
-        "message": "操作成功"
+        "head": {
+            "transType": 4200,
+            "transMessageId": trans_message_id,
+            "code": "EX_CODE_OPENAPI_0200",
+            "message": "操作成功"
         },
-    "body": {
-        "orderId": order_id,
-        "filterLevel": "4",
-        "orderTriggerCondition": "1"
+        "body": {
+            "orderId": order_id,
+            "filterLevel": "4",
+            "orderTriggerCondition": "1"
         }
     }
     logging.debug('SFWaybill reg normal: {}'.format(json.dumps(ret, indent=4, ensure_ascii=False)))
@@ -204,18 +206,18 @@ def sf_reg_order_waybill_normal(trans_message_id, order_id, db):
 def sf_normal_rsp(trans_message_id, order_id, db):
     waybill_code = str(uuid.uuid4()).split('-')[-1]
     ret = {
-    "head": {
-        "transType": "4203",
-        "transMessageId": trans_message_id,
-        "code": " EX_CODE_OPENAPI_0200 ",
-    },
-    "body": {
-        "orderId": order_id,
-        "mailNo": waybill_code,
-        "origincode": "010",
-        "destcode": "755",
-        "filterResult": "2"
-    }
+        "head": {
+            "transType": "4203",
+            "transMessageId": trans_message_id,
+            "code": " EX_CODE_OPENAPI_0200 ",
+        },
+        "body": {
+            "orderId": order_id,
+            "mailNo": waybill_code,
+            "origincode": "010",
+            "destcode": "755",
+            "filterResult": "2"
+        }
     }
     logging.debug('SFWaybill normal: {}'.format(json.dumps(ret, indent=4, ensure_ascii=False)))
     db.add(SfWaybillResp(trans_message_id, order_id, json.dumps(ret['body'])))
@@ -329,40 +331,39 @@ def sf_request_message():
             "sendStartTime": "2014-08-26 07:31:55",
             "custId": "7550010173",
             "cargoInfo": {
-            "cargo": "iphone5s",
-            "cargoAmount": "4999.00",
-            "cargoCount": "4",
-            "cargoTotalWeight": "0.8",
-            "cargoUnit": "部",
-            "cargoWeight": "0.15",
-            "parcelQuantity": 1
-        },
-        "consigneeInfo": {
-            "address": "南山区深圳软件产业基地",
-            "city": "深圳市",
-            "company": "顺丰科技",
-            "contact": "黄飞鸿",
-            "mobile": "18588416666",
-            "province": "广东省",
-            "shipperCode": "518052",
-            "tel": "0755-33916666"
-        },
-        "deliverInfo": {
-            "address": "沧浪区人民路沧浪亭街 31 号神罗科技大厦",
-            "city": "苏州市",
-            "company": "神罗科技",
-            "contact": "莫桂兰",
-            "mobile": "13612822250",
-            "province": "江苏省",
-            "shipperCode ": "215000",
-            "tel": "010-95127777"
-        },
-        "addedServices": [
-            {
-                "name": "COD",
-                "value": "19996"
-            }
+                "cargo": "iphone5s",
+                "cargoAmount": "4999.00",
+                "cargoCount": "4",
+                "cargoTotalWeight": "0.8",
+                "cargoUnit": "部",
+                "cargoWeight": "0.15",
+                "parcelQuantity": 1
+            },
+            "consigneeInfo": {
+                "address": "南山区深圳软件产业基地",
+                "city": "深圳市",
+                "company": "顺丰科技",
+                "contact": "黄飞鸿",
+                "mobile": "18588416666",
+                "province": "广东省",
+                "shipperCode": "518052",
+                "tel": "0755-33916666"
+            },
+            "deliverInfo": {
+                "address": "沧浪区人民路沧浪亭街 31 号神罗科技大厦",
+                "city": "苏州市",
+                "company": "神罗科技",
+                "contact": "莫桂兰",
+                "mobile": "13612822250",
+                "province": "江苏省",
+                "shipperCode ": "215000",
+                "tel": "010-95127777"
+            },
+            "addedServices": [
+                {
+                    "name": "COD",
+                    "value": "19996"
+                }
             ]
         }
     }
-
