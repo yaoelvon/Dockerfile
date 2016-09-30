@@ -5,12 +5,27 @@ import json
 import bottle
 import requests
 import os
+import threading
+import time
 from bottle import HTTPError
 from bottle.ext import sqlalchemy
 from database import Base, engine
 from database import SfToken
 from database import SfWaybillResp
 from database import SfOrderWaybillResp
+
+
+class Task(threading.Thread):
+    def __init__(self, delay, callback, *args):
+        threading.Thread.__init__(self)
+        self.delay = delay
+        self.callback = callback
+        self.args = args
+
+    def run(self):
+        time.sleep(self.delay)
+        self.callback(*self.args)
+
 
 # SF_CALLBACK_URL = os.environ.get('SF_CALLBACK_URL')
 
@@ -77,11 +92,22 @@ def handle_sf_waybill(access_token, sf_appid, sf_appkey, db):
     func = GET_MAPPING.get(order_id[-3]) or sf_reg_order_waybill_normal
     generate_order = func(trans_message_id, order_id, db)
     # callback client normal information
+    task = Task(1, sf_push, trans_message_id, order_id, db)
+    task.start()
+    # waybill = db.query(SfWaybillResp).filter_by(order_id=order_id).first()
+    # logging.error('xxxxxxxxxxxxxxxxxxxxx', waybill.body)
+    return json.dumps(generate_order)
+
+
+def sf_push(trans_message_id, order_id, db):
+    logging.debug('sf push started')
     success_waybill = sf_normal_rsp(trans_message_id, order_id, db)
     sf_callback = os.environ['SF_CALLBACK']
     headers = {'Content-Type': 'application/json'}
-    requests.post(sf_callback, data=json.dumps(success_waybill), headers=headers)
-    return json.dumps(generate_order)
+    r = requests.post(sf_callback, data=json.dumps(success_waybill), headers=headers)
+    db.commit()
+    logging.debug(r.content)
+    logging.debug('sf push ended')
 
 
 @sf.post('/public/v1.0/order/query/access_token/<access_token>/sf_appid/<sf_appid>/sf_appkey/<sf_appkey>')

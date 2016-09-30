@@ -2,7 +2,8 @@ from sqlalchemy import create_engine, Column, Integer, Sequence, String
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
-engine = create_engine('sqlite:///:memory:', echo=True)
+# engine = create_engine('sqlite:///:memeory:', echo=True)
+engine = create_engine('sqlite:///qimen.db', echo=True)
 
 
 class Req(Base):
