@@ -3,10 +3,11 @@ FROM ubuntu:14.04
 # So that we can run as unprivileged user inside the container.
 
 RUN apt-get update && apt-get install -y squid && rm -rf /var/lib/apt/lists/*
+ADD entrypoint.sh /usr/local/bin/
 
 EXPOSE 3128
 
 # The following flags have to be specified when starting this container:
 # -network
 # Refer to -help for documentation on them.
-ENTRYPOINT ["/usr/sbin/squid3"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
