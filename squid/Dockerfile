@@ -4,6 +4,7 @@ FROM ubuntu:14.04
 
 RUN apt-get update && apt-get install -y squid && rm -rf /var/lib/apt/lists/*
 ADD entrypoint.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/entrypoint.sh
 
 EXPOSE 3128
 
