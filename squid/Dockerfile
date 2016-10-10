@@ -4,11 +4,10 @@ FROM ubuntu:14.04
 
 RUN apt-get update && apt-get install -y squid && rm -rf /var/lib/apt/lists/*
 ADD entrypoint.sh /usr/local/bin/
-RUN chmod 755 /usr/local/bin/entrypoint.sh
 
 EXPOSE 3128
 
 # The following flags have to be specified when starting this container:
 # -network
 # Refer to -help for documentation on them.
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/usr/sbin/squid3", "-NYCd", "1"]
