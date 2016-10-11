@@ -3,7 +3,7 @@ FROM ubuntu:14.04
 # So that we can run as unprivileged user inside the container.
 
 RUN apt-get update && apt-get install -y squid && rm -rf /var/lib/apt/lists/*
-
+ADD squid.conf /etc/squid3/squid.conf
 
 EXPOSE 3128
 
