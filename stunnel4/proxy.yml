@@ -1,0 +1,13 @@
+HTTP_PROXY:
+    image: zjqzero/squid
+    restart: "no"
+
+stunnel:
+    image: zjqzero/stunnel4
+    ports:
+        - "18888:5000"
+    links:
+        - HTTP_PROXY
+    volumes: 
+        - /home/zhou/stunnel_certs:/var/lib/stunnel4/certs
+    restart: "no"
