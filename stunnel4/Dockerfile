@@ -12,4 +12,4 @@ EXPOSE 5000
 # The following flags have to be specified when starting this container:
 # -network
 # Refer to -help for documentation on them.
-ENTRYPOINT ["/usr/bin/stunnel4", "/etc/stunnel/stunnel.conf"]
+CMD ["/usr/bin/stunnel4", "/etc/stunnel/stunnel.conf"]
