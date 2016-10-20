@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y stunnel4 && rm -rf /var/lib/apt/lists/*
 ADD stunnel.conf /etc/stunnel/stunnel.conf
 ADD server.pem /etc/stunnel/server.pem
 
+RUN sed -i s/ENABLED=0/ENABLED=1/ stunnel4 
+
 EXPOSE 5000
 
 # The following flags have to be specified when starting this container:
