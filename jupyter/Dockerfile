@@ -6,7 +6,7 @@ RUN apt-get update
 RUN apt-get install -y python-dev python-pip
 RUN pip install jupyter
 
-RUN rm /var/lib/apt/lists/*
+RUN rm -rf /var/lib/apt/lists/*
 
 VOLUME /notebooks
 WORKDIR /notebooks
