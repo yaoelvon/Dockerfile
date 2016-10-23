@@ -13,6 +13,6 @@ WORKDIR /notebooks
 
 EXPOSE 8888
 
-ADD ./notebook.sh /notebook.sh
+COPY ./notebook.sh /notebook.sh
 
 CMD ["/notebook.sh"]
