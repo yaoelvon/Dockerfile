@@ -6,8 +6,9 @@ ADD start.sh /start.sh
 
 RUN apt-get update
 RUN apt-get install -y python python3 python-dev python3-dev python-pip python3-pip
-RUN pip install jupyter ipython
 RUN pip3 install jupyter ipython
+RUN python2 -m pip install ipykernel
+RUN python2 -m ipykernel install --user
 
 RUN rm -rf /var/lib/apt/lists/*
 
