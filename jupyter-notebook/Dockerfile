@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 
 MAINTAINER zjqzero@gmail.com
 
-ADD notebook.sh /notebook.sh
+ADD start.sh /start.sh
 RUN apt-get update
 RUN apt-get install -y python-dev python-pip
 RUN pip install jupyter
@@ -16,4 +16,4 @@ EXPOSE 8888
 
 
 
-CMD ["/notebook.sh"]
+CMD ["/start.sh"]
