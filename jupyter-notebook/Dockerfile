@@ -10,6 +10,9 @@ RUN pip3 install jupyter ipython
 RUN python2 -m pip install ipykernel
 RUN python2 -m ipykernel install --user
 
+RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
+
 RUN rm -rf /var/lib/apt/lists/*
 
 VOLUME /notebooks
