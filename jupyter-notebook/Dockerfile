@@ -13,7 +13,7 @@ RUN python2 -m pip install ipykernel
 RUN python2 -m ipykernel install --user
 
 RUN pip install -r requirements2.txt
-RUN pip3 install -r requirements3.txt
+# RUN pip3 install -r requirements3.txt
 
 RUN rm -rf /var/lib/apt/lists/*
 
