@@ -3,7 +3,8 @@ FROM ubuntu:16.04
 MAINTAINER zhoujunqian <zjqzero@gmail.com>
 
 ADD start.sh /start.sh
-ADD requirements.txt /requirements.txt
+ADD requirements2.txt /requirements2.txt
+ADD requirements3.txt /requirements3.txt
 
 RUN apt-get update
 RUN apt-get install -y python python3 python-dev python3-dev python-pip python3-pip
