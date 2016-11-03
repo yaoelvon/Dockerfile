@@ -1,3 +1,4 @@
 suds
 celery
 mongoengine
+sqlalchemy
