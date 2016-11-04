@@ -21,7 +21,7 @@ Run the image in the foreground
 
     docker run -ti -p 5555:5555 ] -e CELERY_BROKER_URL=amqp://guest:guest@<broker_ipaddr>:5672// zjqzero/flower --broker_api=http://<username>:<password>@<hostname>:15672/api/
 
-    docker run -d -p 5555:5555 -e CELERY_BROKER_URL=redis://<ipaddr>:6379/0 zjqzero/flower --broker_api=redis://<ipaddr>:6379/0
+    docker run -d -p 5555:5555 -e CELERY_BROKER_URL=redis://<ipaddr>:6379/0 zjqzero/flower --broker_api=redis://<ipaddr>:6379/0 -basic_auth=<username>:<password>
 
 Flower should be running on http://127.0.0.1:5555 (if you're running boot2docker you'll need to use
 boot2docker's IP address instead)
