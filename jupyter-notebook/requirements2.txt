@@ -1,4 +1,18 @@
 suds
 celery
 mongoengine
+<<<<<<< Updated upstream
 sqlalchemy
+=======
+eventlet>=0.18.4
+greenlet>=0.4.9
+Paste>=2.0.3
+PasteDeploy>=1.5.2
+Routes>=2.3.1
+WebOb>=1.6.0
+requests>=2.9.1
+prettytable>=0.7.2
+mongoengine>=0.10.6
+beautifulsoup4>=4.4.1
+python-dateutil>=2.5.3
+>>>>>>> Stashed changes
